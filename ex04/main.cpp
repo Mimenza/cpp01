@@ -35,14 +35,25 @@ void replaceStringInFile(const std::string& filename, const std::string& s1, con
 
 	while (std::getline(input, line))
 	{
-		pos = 0;
-		while ((pos = line.find(s1, pos)) != std::string::npos)
+        std::string newLine;
+        pos = 0;
+        while (true)
 		{
-			line.replace(pos, s1.length(), s2);
-			pos += s2.length();
-		}
-		output << line << std::endl;
-	}
+            size_t found = line.find(s1, pos);
+            if (found != std::string::npos)
+			{
+                newLine.append(line, pos, found - pos);
+                newLine.append(s2);
+                pos = found + s1.length();
+            }
+			else
+			{
+                newLine.append(line, pos, line.length() - pos);
+                break;
+            }
+        }
+        output << newLine << std::endl;
+    }
 
 	std::cout << "Replacement completed. Output written to " << filename << ".replace" << std::endl;
 }
